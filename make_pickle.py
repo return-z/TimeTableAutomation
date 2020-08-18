@@ -1,4 +1,5 @@
 from openpyxl import load_workbook
+import pickle,re
 
 class component:
     pass
@@ -17,36 +18,36 @@ for row in ws.iter_rows():
         pass
 
 for i in range(len(courseSpan)-1):
-    cell = f'B{courseSpan[i]}'
-    subjectWise[f"{ws[cell].value}"] = key = []
+    code = f'B{courseSpan[i]}'
+    title = f'C{courseSpan[i]}'
+    subjectWise[(f"{ws[code].value}", f"{ws[title].value}")] = key = []
     start = courseSpan[i]
     end = courseSpan[i+1] - 1
     for row in ws.iter_rows(min_row=start, max_row=end):
-        if row[8].value:
+        if row[8].value and row[8].value != "ROOM":
             key.append(row[8].row)
     key.append(courseSpan[i+1])
 
-objects = []
+objects = {}
 
 for subject in subjectWise:
+    objects[subject] = []
     arr = subjectWise[subject]
     cell = f'I{arr[0]}' # for info regarding room number
 
     if len(arr) == 1:
         courseObject = component()
-        courseObject.subject = subject
         courseObject.type = "Misc"
         courseObject.room = ws[cell].value
         courseObject.days = ws[f'J{arr[0]}'].value
         courseObject.hour =  ws[f'K{arr[0]}'].value
         for row in ws.iter_rows(min_row=arr[0], max_row=arr[0]):
             courseObject.teachers = (row[7].value)
-        objects.append(courseObject)
+        objects[subject].append(courseObject)
     courseType = "Lecture"
 
     for i in range(len(arr)-1):
         courseObject = component()
-        courseObject.subject = subject
         courseObject.teachers = []
         courseObject.room = ws[cell].value
         courseObject.days = ws[f'J{arr[i]}'].value
@@ -55,10 +56,14 @@ for subject in subjectWise:
             courseType = ws[f'C{arr[i]}'].value
         courseObject.type = courseType
         for row in ws.iter_rows(min_row=arr[i], max_row=arr[i+1]-1):
-            courseObject.teachers.append(row[7].value)
-        objects.append(courseObject)
+            if not row[7].value == "INSTRUCTOR-IN-CHARGE/\nInstructor":
+                courseObject.teachers.append(row[7].value)
+        objects[subject].append(courseObject)
 
+def save_obj():
+    with open("objects" + '.pkl', 'wb') as f:
+        pickle.dump(objects, f, pickle.HIGHEST_PROTOCOL)
 
-print([(courseObject.subject, courseObject.type) for courseObject in objects])
-    
+save_obj()
+
 
