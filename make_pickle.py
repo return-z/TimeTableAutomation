@@ -41,6 +41,7 @@ for subject in subjectWise:
         courseObject.room = ws[cell].value
         courseObject.days = ws[f'J{arr[0]}'].value
         courseObject.hour =  ws[f'K{arr[0]}'].value
+        courseObject.section = ws[f'G{arr[0]}'].value
         for row in ws.iter_rows(min_row=arr[0], max_row=arr[0]):
             courseObject.teachers = (row[7].value)
         objects[subject].append(courseObject)
@@ -52,6 +53,7 @@ for subject in subjectWise:
         courseObject.room = ws[cell].value
         courseObject.days = ws[f'J{arr[i]}'].value
         courseObject.hour =  ws[f'K{arr[i]}'].value
+        courseObject.section = ws[f'G{arr[i]}'].value
         if ws[f'C{arr[i]}'].value == "Tutorial" or ws[f'C{arr[i]}'].value == "Practical":
             courseType = ws[f'C{arr[i]}'].value
         courseObject.type = courseType

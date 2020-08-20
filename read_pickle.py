@@ -3,11 +3,12 @@ import pickle, re
 class component:
     pass
 
-def load_obj():
-    with open("objects.pkl", "rb") as f:
+def load_obj(name):
+    with open(name + ".pkl", "rb") as f:
         return pickle.load(f)
 
-objects = load_obj()
+objects = load_obj("objects")
+cdc = load_obj("cdc")
 yearWise = {}
 
 for i in range(1,8):
@@ -22,10 +23,12 @@ for tup in objects:
     except:
         pass
 
-# print(yearWise[3])
+# print(yearWise[3])        
 
-for course in yearWise[1]:
+for course in yearWise[2]:
     print(course)
-    for obj in yearWise[1][course]:
-        print(obj.type, obj.teachers, obj.days, obj.hour)
+    for obj in yearWise[2][course]:
+        print(obj.type, obj.section, obj.teachers, obj.days, obj.hour)
     print("\n")
+
+print(cdc)
