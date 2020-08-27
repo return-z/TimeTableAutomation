@@ -23,12 +23,12 @@ for tup in objects:
     except:
         pass
 
-# print(yearWise[3])        
+# print(yearWise[3])     
 
-for course in yearWise[2]:
+for course in yearWise[1]:
     print(course)
-    for obj in yearWise[2][course]:
-        print(obj.type, obj.section, obj.teachers, obj.days, obj.hour)
+    for componentType in yearWise[1][course]:
+        print(componentType, [(obj.days, obj.hours) for obj in yearWise[1][course][componentType]])
     print("\n")
 
-print(cdc)
+# print(cdc)

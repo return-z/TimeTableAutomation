@@ -1,0 +1,31 @@
+.grid {
+  justify-content: "center";
+  margin-top: 100;
+  display: "grid";
+  grid-template-columns: repeat(13, 100px);
+  text-align: "center";
+  align-content: "center";
+}
+
+.days {
+  width: 100;
+  height: 50;
+  border: "solid 1px black";
+  align-content: "center";
+  background-color: "#20e6dc";
+}
+
+.hour {
+  width: 100;
+  height: 50;
+  border: "solid 1px black";
+  align-content: "center";
+  background-color: "#20e6dc";
+}
+
+.slot {
+  width: 100;
+  height: 50;
+  border: "solid 1px black";
+  align-content: "center";
+}

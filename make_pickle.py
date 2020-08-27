@@ -4,7 +4,7 @@ import pickle,re
 class component:
     pass
 
-wb = load_workbook('timetable.xlsx')
+wb = load_workbook('old.xlsx')
 ws = wb['Table 1']
 courseCodes = []
 courseSpan = []
@@ -30,37 +30,49 @@ for i in range(len(courseSpan)-1):
 
 objects = {}
 
+def correctedHour(ws, cell):
+    hour = str(ws[cell].value)
+    try:
+        if len(hour) == 2 and int(hour) > 11:
+            return [int(hour[0]), int(hour[1])]
+        if len(hour) == 3:
+            return [int(hour[0]), int(hour[1:])]
+        if len(hour) == 4:
+            return [int(hour[:2]), int(hour[2:])]
+        else:
+            return [int(hour)]
+    except:
+        return [ws[cell].value]
+
 for subject in subjectWise:
-    objects[subject] = []
+    objects[subject] = {'Lecture' : [], 'Tutorial' : [], 'Practical' : [], 'Misc' : []}
     arr = subjectWise[subject]
     cell = f'I{arr[0]}' # for info regarding room number
 
     if len(arr) == 1:
         courseObject = component()
-        courseObject.type = "Misc"
         courseObject.room = ws[cell].value
         courseObject.days = ws[f'J{arr[0]}'].value
-        courseObject.hour =  ws[f'K{arr[0]}'].value
+        courseObject.hours =  correctedHour(ws, f'K{arr[0]}')
         courseObject.section = ws[f'G{arr[0]}'].value
         for row in ws.iter_rows(min_row=arr[0], max_row=arr[0]):
             courseObject.teachers = (row[7].value)
-        objects[subject].append(courseObject)
+        objects[subject]['Misc'].append(courseObject)
     courseType = "Lecture"
 
     for i in range(len(arr)-1):
         courseObject = component()
         courseObject.teachers = []
         courseObject.room = ws[cell].value
-        courseObject.days = ws[f'J{arr[i]}'].value
-        courseObject.hour =  ws[f'K{arr[i]}'].value
+        courseObject.days = re.split(r'\s', ws[f'J{arr[i]}'].value)
+        courseObject.hours =  correctedHour(ws, f'K{arr[i]}')
         courseObject.section = ws[f'G{arr[i]}'].value
         if ws[f'C{arr[i]}'].value == "Tutorial" or ws[f'C{arr[i]}'].value == "Practical":
             courseType = ws[f'C{arr[i]}'].value
-        courseObject.type = courseType
         for row in ws.iter_rows(min_row=arr[i], max_row=arr[i+1]-1):
             if not row[7].value == "INSTRUCTOR-IN-CHARGE/\nInstructor":
                 courseObject.teachers.append(row[7].value)
-        objects[subject].append(courseObject)
+        objects[subject][courseType].append(courseObject)
 
 def save_obj():
     with open("objects" + '.pkl', 'wb') as f:
