@@ -1,8 +1,6 @@
 import createTT
 import json
 from flask import Flask,jsonify,request
-class component:
-    pass
 
 app=Flask("__name__")
 app.config["DEBUG"]=True
@@ -32,4 +30,6 @@ def api():
         return(jsonify(TT))
     #TT=createTT.returnData(stream,year,sem)
 if __name__=='__main__':
+    class component:
+        pass
     app.run()

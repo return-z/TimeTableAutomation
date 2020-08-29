@@ -1,9 +1,6 @@
 import pickle, re, json
 import pandas as pd
 
-class component:
-    pass
-
 def load_obj(name):
     with open(name + ".pkl", "rb") as f:
         return pickle.load(f)
@@ -31,6 +28,9 @@ def dayCanBeLoaded(timetable, dayarray):
 dayToNum = {'M' : 1, 'T' : 2, 'W' : 3, 'Th' : 4, 'F' : 5, 'S' : 6}
 timeTable = {}
 def returnData(stream,year,sem):
+    class component:
+        pass
+
     objects = load_obj("objects")
     cdc = load_obj("cdc")
 
