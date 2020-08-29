@@ -76,8 +76,6 @@ for subject in subjectWise:
 
 def save_obj():
     with open("objects" + '.pkl', 'wb') as f:
-        pickle.dump(objects, f, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(objects, f,protocol=3)
 
 save_obj()
-
-
