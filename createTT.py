@@ -1,8 +1,17 @@
 import pickle, re, json
-import pandas as pd
+
+class CustomUnpickler(pickle.Unpickler):
+
+    def find_class(self, module, name):
+        if name == 'component':
+            from component_class import component
+            return component
+        return super().find_class(module, name)
+
 
 def load_obj(name):
-    with open(name + ".pkl", "rb") as f:
+    name = "/home/returnz/TimeTableAutomation/objects.pkl"
+    with open(name, "rb") as f:
         return pickle.load(f)
 
 
@@ -27,12 +36,11 @@ def dayCanBeLoaded(timetable, dayarray):
 
 dayToNum = {'M' : 1, 'T' : 2, 'W' : 3, 'Th' : 4, 'F' : 5, 'S' : 6}
 timeTable = {}
-def returnData(stream,year,sem):
-    class component:
-        pass
 
-    objects = load_obj("objects")
-    cdc = load_obj("cdc")
+def returnData(stream,year,sem):
+
+    objects = CustomUnpickler(open('/home/returnz/TimeTableAutomation/objects.pkl', 'rb')).load()
+    cdc = CustomUnpickler(open('/home/returnz/TimeTableAutomation/cdc.pkl', 'rb')).load()
 
     days, hours = 6, 12
 

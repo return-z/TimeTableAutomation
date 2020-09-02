@@ -1,0 +1,2 @@
+class component:
+  pass
